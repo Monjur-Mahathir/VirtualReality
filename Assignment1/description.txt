@@ -1,0 +1,21 @@
+This is a 3d version of Flappy Bird Game, where the user will press the button in google cardboard in order for the bird to jump. This is actually a game because it has the required features of games, which are:
+
+1. Fixed Rules: If we press button, the bird jumps. If the bird colliders with a wall, or fall to the ground, you lose. Otherwise, you move foward. (In the video, I re-created the bird, if it collides, so that I could capture the video. But if I just change one line of code, the bird actually deletes 
+from the scene if it collides)
+
+2. Quantifiable Outcome: At the end, the number of walls passed bu the user is the score.
+
+3. Valorization of Outcome: The original 2d version of the game is actually one of the most addictive and played mobile games and players feel the urge to pass more walls.
+
+4. Player Effort: Players need good reflection and consistency to jump for a long time. 
+
+5. Attachment of the Player to the Outcome: Players feel joy if they beat the previous high scores.
+
+Description:
+In this game, I have a fixed cube which acts as the ground. There are also 2 types of walls- one comes from ground and other comes from sky. These walls are continouly generated at a fixed point and then moves front- creating an illusion of animation. Collision with the bird is also detected.
+
+Issues:
+1. In the unity game screen, my intended viewing angle can be seen in the attached video "intenden.mov". You can see me play the game there as I intended. But for some reason, in android, I get a different and weird viewing angle.
+
+Used Resource:
+I followed through and modified from the following youtube: https://www.youtube.com/watch?v=1Bwbjq_WclI
