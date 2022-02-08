@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+  <canvas id="galaxy" width="1200" height="800" style="border:1px solid #000000;"></canvas>
+<script type="text/javascript" src="solar.js"></script>
+<script type="text/javascript">
+  window.onload = function(){
+    var canvas = document.getElementById("galaxy");
+    var context = canvas.getContext("2d");
+    var img = document.getElementById("black");
+    var galaxyMotion = 0;
+    var planets = []
+
+    planets.push(new Planet(context,400, 300, 2, 0.6, ["#B22222", "#0000FF"]));
+    planets.push(new Planet(context, 200, 100, 4, 0.7, ["#B22222", "#0000FF", "#2F4F4F", "#808080"]));
+    //planets.push(new Planet(context, 200, 200));
+
+    //start drawing the first frame
+		requestAnimationFrame(mainLoop);
+    function mainLoop(){
+      update();
+      draw();
+
+      requestAnimationFrame(mainLoop);
+    }
+
+    function update(){
+      galaxyMotion += 0.001;
+      planets.forEach(function(c) { c.update(); })
+    }
+
+    function draw() {
+
+				//clear our drawing
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				//save the coordinate frame (in case we wanted to draw other things after the copters)
+				context.save();
+				//draw each copter
+        context.beginPath();
+
+        context.translate(600, 400);
+        context.arc(0,0, 50, 0, 2 * Math.PI, false);
+        context.fillStyle = "black";
+        context.fill();
+        context.lineWidth = 2;
+        context.strokeStyle = "black";
+        context.stroke();
+        context.rotate(galaxyMotion);
+
+				planets.forEach(function(c) { c.draw(); })
+				//restore the coordinate frame (in case we wanted to draw other things)
+				context.restore();
+			}
+
+  };
+</script>
+</body>
+</html>
