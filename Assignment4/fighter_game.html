@@ -38,6 +38,8 @@
       var player = new Player(context, player_x, player_y);
       var enemy = new Enemy(context, 400, 10, 3);
       var score = 0;
+	  var timer = 0;
+	  var interval = 10;
 
       var fixedFps = 60; //this is the fixed desired FPS
       var previousTime = Date.now();
@@ -70,7 +72,12 @@
       function processInput()
       {
         if(keysdown.Control){
-          player.fire();
+          timer++;
+		  if(timer == interval){
+			timer = 0;
+			player.fire();
+		  }
+		  //player.fire();
         }
 
         if(keysdown.ArrowLeft) {
