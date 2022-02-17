@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="fighter" width="1200" height="800" style="border:1px solid #000000;"></canvas>
+
+  <script type="text/javascript" src="player.js"></script>
+  <script type="text/javascript" src="enemy.js"></script>
+
+  <script type="text/javascript">
+
+    var keysdown = {};
+    window.addEventListener("keydown", function (event) {
+      if (event.defaultPrevented) {
+        return;
+      }
+      keysdown[event.key] = true;
+      event.preventDefault();
+    }, true);
+
+    window.addEventListener("keyup", function (event) {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      keysdown[event.key] = false;
+      event.preventDefault();
+    }, true);
+
+    window.onload = function(){
+      var canvas = document.getElementById("fighter");
+      var context = canvas.getContext("2d");
+
+      var player_x = 100;
+      var player_y = 700;
+      var move_with_one_key = 5;
+
+      var player = new Player(context, player_x, player_y);
+      var enemy = new Enemy(context, 400, 10, 3);
+      var score = 0;
+
+      var fixedFps = 60; //this is the fixed desired FPS
+      var previousTime = Date.now();
+			var ms_per_update = 1000 / fixedFps;
+      var lag = 0;
+
+      //start drawing the first frame
+  		requestAnimationFrame(mainLoop);
+
+      function mainLoop(){
+        var currentTime = Date.now();
+        var elapsedTime = currentTime - previousTime;
+        previousTime = currentTime;
+        lag += elapsedTime;
+        processInput();
+        while(lag >= ms_per_update)
+        {
+          update();
+          lag -= ms_per_update;
+        }
+        //update();
+        draw(lag/ms_per_update);
+
+        requestAnimationFrame(mainLoop);
+        //setTimeout(function() {
+        //  mainLoop();
+        //}, 1000/desiredFPS);
+      }
+
+      function processInput()
+      {
+        if(keysdown.Control){
+          player.fire();
+        }
+
+        if(keysdown.ArrowLeft) {
+		        player.decX(move_with_one_key);
+        }
+
+        if(keysdown.ArrowUp){
+		        player.decY(move_with_one_key);
+	      }
+
+	      if (keysdown.ArrowRight) {
+		        player.incX(move_with_one_key, canvas.width);
+	      }
+
+	      if (keysdown.ArrowDown) {
+		        player.incY(move_with_one_key, canvas.height);
+	      }
+      }
+
+      function update(){
+        var bullets = player.getBullets();
+        var enemy_coord = enemy.getCoords();
+        var destroyed = 0;
+        var bulletDestroyed = -1;
+        for(var i=0; i<bullets.Xs.length; i++){
+          var x_i = bullets.Xs[i];
+          var y_i = bullets.Ys[i];
+
+          var enemy_x = enemy_coord.X;
+          var enemy_y = enemy_coord.Y;
+
+          if(x_i >= enemy_x && x_i <= enemy_x+70 && Math.abs(y_i - enemy_y) <=5){
+            enemy.Destroy(canvas.width);
+            score++;
+            destroyed = 1;
+            bulletDestroyed = i;
+            break;
+          }
+
+        }
+        if(bulletDestroyed != -1){
+          console.log(bulletDestroyed);
+          player.destroyBullet(bulletDestroyed);
+        }
+        player.update();
+        if(destroyed == 0)enemy.update(canvas.height, canvas.width);
+      }
+
+      function draw(lag_leftover) {
+
+  				//clear our drawing
+  				context.clearRect(0, 0, canvas.width, canvas.height);
+  				//save the coordinate frame (in case we wanted to draw other things after the copters)
+  				context.save();
+
+          player.draw(lag_leftover);
+          enemy.draw(lag_leftover);
+
+          context.scale(3, 3);
+          context.fillText("Score: " + score, 10, 10);
+
+  				//restore the coordinate frame (in case we wanted to draw other things)
+  				context.restore();
+
+  			}
+
+    };
+  </script>
+  </body>
+  </html>
