@@ -1,0 +1,3 @@
+In this assignment, I animated a galaxy- where there is a black hole at the center f te galaxy. Several solar systems (2 in the current code, but can be added with 1 line) move
+in a circular motion around the black hole. Within each solar system, there are also a sun and several planets. The number of planets can be passed as a parameter. Each planet
+moves around the sun, while the whole solar system including the sun and all the planets within, move around the black hole.
